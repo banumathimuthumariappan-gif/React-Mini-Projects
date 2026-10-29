@@ -7,9 +7,6 @@ function App() {
   const [todos, setTodos] = useState<ToDo[]>([]);
 
   const handleAddTask = () => {
-    console.log("Task Added");
-    console.log("Task: " + task);
-    
     const newToDo: ToDo = {
       id: Date.now(),
       task: task,
