@@ -3,54 +3,60 @@ import './App.css'
 import type { ToDo } from './interfaces/todo.interface';
 
 function App() {
-  const [task, setTask] = useState('');
-  const [todos, setTodos] = useState<ToDo[]>([]);
+  const [todo, setToDo] = useState('');
+  const [tasks, setTasks] = useState<ToDo[]>([]);
 
   const handleAddTask = () => {
-    const newToDo: ToDo = {
+    console.log(todo);
+
+    const newTodo: ToDo = {
       id: Date.now(),
-      task: task,
+      task: todo,
       completed: false
     }
-    setTodos((prevTodo) => [...prevTodo, newToDo]);
-    setTask('');
+    setTasks((prevTasks) => [...prevTasks, newTodo]);
+    setToDo('');
   }
 
   const handleToggleTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.map((todo) => todo.id === id ? {...todo, completed: !todo.completed} : todo));
+    setTasks((prevTasks) => prevTasks.map((task) => task.id === id ? {...task, completed: !task.completed} : task));
   }
 
-  const handleDeleteTask = (id: number) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = (id: number) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   }
 
   return (
     <div className="container-fluid">
       <div className="text-center mt-5">
-          <h4>To Do Application</h4>
-          <div className="row justify-content-center mt-3">
-            <div className="col-8">
-              <div className='d-flex gap-2'>
-                <input type="text" name="task" id="task" placeholder='Enter Task here' className="form-control" value={task} onChange={(event) => setTask(event.target.value)} onKeyDown={(event) => {
-                  if(event.key === 'Enter') {
+        <h4>To Do App</h4>
+        <div className="row justify-content-center">
+          <div className="col-8">
+            <div className='d-flex gap-2'>
+              <input type="text" name="todo" id="todo" value={todo} className='form-control' onChange={(event) => setToDo(event.target.value)} onKeyDown={(event) => {
+                if(event.key === 'Enter') {
+                  if(todo !== '') {
                     handleAddTask();
                   }
-                }} />
-                <button className="btn btn-primary text-nowrap" onClick={handleAddTask}>Add Task</button>
-              </div>
+                }
+              }} placeholder='Enter To do...'/>
+              <button className="btn btn-info" onClick={handleAddTask} disabled={todo === ''}>Add</button>
             </div>
           </div>
-          <div className="row justify-content-center mt-3">
+        </div>
+        <div className="row justify-content-center mt-4">
+          <div className="col-8">
             <div className="list-group">
-              {todos.map((todo: ToDo) => (
-                <li className='list-group-item' key={todo.id}>
-                  <input type="checkbox" name="task" id="task" className='form-check-input' checked={todo.completed} onChange={() => handleToggleTodo(todo.id)} />
-                  <span className={`ms-3 ${todo.completed === true ? 'text-decoration-line-through' : ''}`}>{todo.task}</span>
-                  <button className="ms-4 btn btn-sm btn-danger" onClick={() => handleDeleteTask(todo.id)}>Delete</button>
-                </li>
+              {tasks.map((task) => (
+                <div className="list-group-item" key={task.id}>
+                  <input type="checkbox" name="status" id="status" className='form-check-input' onChange={() => handleToggleTodo(task.id)} />
+                  <span className={`ms-3 ${task.completed === true ? 'text-decoration-line-through' : ''}`}>{task.task}</span>
+                  <button className="ms-3 btn btn-sm btn-danger" onClick={() => handleDeleteTodo(task.id)}>Delete</button>
+                </div>
               ))}
             </div>
           </div>
+        </div>
       </div>
     </div>
   )
